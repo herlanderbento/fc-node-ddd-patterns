@@ -10,7 +10,7 @@ import OrderModel from './order.model';
 import ProductModel from './product.model';
 
 @Table({
-  tableName: 'orders_items',
+  tableName: 'order_items',
   timestamps: false,
 })
 export default class OrderItemModel extends Model {
@@ -30,7 +30,7 @@ export default class OrderItemModel extends Model {
   declare order_id: string;
 
   @BelongsTo(() => OrderModel)
-  declare order: OrderModel;
+  declare order: ProductModel;
 
   @Column({ allowNull: false })
   declare quantity: number;

@@ -5,12 +5,15 @@ import OrderItem from '../../domain/entity/order_item';
 import Order from '../../domain/entity/order';
 
 import Product from '../../domain/entity/product';
-import CustomerModel from '../db/sequelize/model/customer.model';
 import CustomerRepository from './customer.repository';
 import ProductRepository from './product.repository';
 import OrderModel from '../db/sequelize/model/order.model';
+import OrderRepository from './order.repository';
+import CustomerModel from '../db/sequelize/model/customer.model';
+import OrderItemModel from '../db/sequelize/model/order-item.model';
+import ProductModel from '../db/sequelize/model/product.model';
 
-describe('Customer repository test', () => {
+describe('Order repository test', () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -21,7 +24,12 @@ describe('Customer repository test', () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([CustomerModel]);
+    await sequelize.addModels([
+      CustomerModel,
+      OrderModel,
+      OrderItemModel,
+      ProductModel,
+    ]);
     await sequelize.sync();
   });
 
@@ -32,17 +40,16 @@ describe('Customer repository test', () => {
   it('should create a new order', async () => {
     const customerRepository = new CustomerRepository();
     const customer = new Customer('123', 'Customer 1');
-    const address = new Address('street 1', 1, 'Zipcode 1', 'city 1');
-    customer.changeAddress(address);
-
+    const address = new Address('Street 1', 1, 'Zipcode 1', 'City 1');
+    customer.Address = address;
     await customerRepository.create(customer);
 
     const productRepository = new ProductRepository();
-    const product = new Product('123', 'Product 1', 10);
+    const product = new Product('123', 'Product 1', 100);
     await productRepository.create(product);
 
     const orderItem = new OrderItem(
-      '1',
+      '123',
       product.name,
       product.price,
       product.id,
@@ -55,9 +62,7 @@ describe('Customer repository test', () => {
     await orderRepository.create(order);
 
     const orderModel = await OrderModel.findOne({
-      where: {
-        id: order.id,
-      },
+      where: { id: order.id },
       include: ['items'],
     });
 
@@ -71,10 +76,10 @@ describe('Customer repository test', () => {
           name: orderItem.name,
           price: orderItem.price,
           quantity: orderItem.quantity,
-          order_id: "123"
+          order_id: '123',
+          product_id: '123',
         },
       ],
     });
   });
-
 });
