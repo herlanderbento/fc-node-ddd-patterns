@@ -1,5 +1,5 @@
 
-import RepositoryInterface from '../../_shared/repository/implementations/repository-interface';
+import RepositoryInterface from '../../_shared/repository/repository-interface';
 import Customer from '../entity/customer';
 
 
