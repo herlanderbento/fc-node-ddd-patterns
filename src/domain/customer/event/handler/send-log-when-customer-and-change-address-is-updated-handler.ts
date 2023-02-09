@@ -4,7 +4,7 @@ import CustomerAddressUpdatedEvents from '../customer-address-updated-events';
 export default class SendLogWhenCustomerAndChangeAddressIsUpdatedHandler
   implements EventHandlerInterface<CustomerAddressUpdatedEvents>
 {
-  handle({ eventData }: CustomerAddressUpdatedEvents): void {
+  public handle({ eventData }: CustomerAddressUpdatedEvents): void {
     const { id, name, address } = eventData;
     console.log(
       `Endereço do cliente: ${id}, ${name} alterado para: ${address.toString()}`
